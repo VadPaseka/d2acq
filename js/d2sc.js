@@ -25,7 +25,6 @@ var resetGame = function() {
 var setNewAbility = function() {
 	var index = Math.floor(Math.random() * unplayed.length);
 	curAbility = unplayed[index];
-	console.log(curAbility);
 	hidden = true;
 
 	// hide ability icon
