@@ -2,6 +2,10 @@ var ABILITIES = ['Acid Spray', 'Activate Fire Remnant', 'Adaptive Strike', 'Alac
 
 var unplayed = ABILITIES.slice();
 
+var identical = {}
+identical['Split Earth'] = 'Boulder Smash';
+identical['Boulder Smash'] = 'Split Earth';
+
 var curAbility;
 var hidden;
 var score;
@@ -26,6 +30,7 @@ var resetGame = function() {
 var setNewAbility = function() {
 	var index = Math.floor(Math.random() * unplayed.length);
 	curAbility = unplayed[index];
+	curAbility = 'Boulder Smash';
 	hidden = true;
 
 	// hide ability icon
@@ -79,7 +84,7 @@ var submitAnswer = function(answer) {
 	// console.log(answer)
 	if(hidden) {
 		revealAbility();
-		var correct = (answer === curAbility);
+		var correct = isAnswerCorrect(answer)
 		updateScore(correct);
 		unplayed.splice(unplayed.indexOf(curAbility), 1);
 		if(misses < 3) {
@@ -91,6 +96,17 @@ var submitAnswer = function(answer) {
 		}
 	}
 }
+
+var isAnswerCorrect = function(answer) {
+	if(answer === curAbility) {
+		return true;
+	} else if(identical[answer] === curAbility) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 $(document).ready(function() {
 	$('.reset').click(function() {
 		resetGame();
