@@ -30,7 +30,6 @@ var resetGame = function() {
 var setNewAbility = function() {
 	var index = Math.floor(Math.random() * unplayed.length);
 	curAbility = unplayed[index];
-	curAbility = 'Boulder Smash';
 	hidden = true;
 
 	// hide ability icon
