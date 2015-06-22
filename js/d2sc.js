@@ -11,6 +11,7 @@ var hidden;
 var score;
 var streak;
 var misses;
+var hintGiven;
 
 
 var resetGame = function() {
@@ -19,6 +20,7 @@ var resetGame = function() {
 	misses = 0;
 	unplayed = ABILITIES.slice();
 	hidden = true;
+	hintGiven = false;
 
 	console.log(ABILITIES.length);
 	$('.reset').css('visibility', 'hidden');
@@ -32,9 +34,11 @@ var setNewAbility = function() {
 	curAbility = unplayed[index];
 	hidden = true;
 
+	// Get rid of old hint
+	$('#cheat').text('Give me a hint!');
 	// hide ability icon
 	$('#ability-icon').attr('src', 'img/icons/Unknown.png');
-	// hide ability text
+	//Set text to ???
 	$('#ability-text').text('???');
 	// set ability audio
 	$('#ability-audio').attr('src', 'audio/'+curAbility+'.mp3');
@@ -42,6 +46,24 @@ var setNewAbility = function() {
 	$('#ability-player').load();
 	$('.typeahead').typeahead('val', '');
 };
+
+var giveHint = function() {
+	if (hintGiven == true) {
+		return;
+	}
+	var right = Math.floor(Math.random() * 4);
+	var options = [];
+	for (var i = 0; i <= 3; i++) {
+		if (i == right) {
+			options.push(" " + curAbility);
+		}
+		else {
+			options.push(" " + ABILITIES[Math.floor(Math.random() * ABILITIES.length)]);
+		}
+	}
+	$('#cheat').text('It\'s one of these:' + options);
+	hintGiven = true;
+}
 
 var revealAbility = function() {
 	hidden = false;
@@ -55,6 +77,9 @@ var updateScore = function(correct) {
 	var delta = 0;
 	if(correct) {
 		delta = 200 + 50 * streak;
+		if(hintGiven) {
+			delta /= 2;
+		}
 		score += delta;
 		streak++;
 		// create floating +score
